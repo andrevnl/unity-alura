@@ -5,14 +5,20 @@ using UnityEngine;
 
 public class Bala : MonoBehaviour
 {
-
     public float Velocidade = 20;
+    private Rigidbody _rigidbodyBala;
+
+    private void Start()
+    {
+        _rigidbodyBala = GetComponent<Rigidbody>();
+    }
+
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        GetComponent<Rigidbody>().MovePosition(
-            GetComponent<Rigidbody>().position + 
+        _rigidbodyBala.MovePosition(
+            _rigidbodyBala.position +
             transform.forward * Velocidade * Time.deltaTime);
     }
 
@@ -22,7 +28,7 @@ public class Bala : MonoBehaviour
         {
             Destroy(objetoDeColisao.gameObject);
         }
-        
+
         Destroy(gameObject);
     }
 }

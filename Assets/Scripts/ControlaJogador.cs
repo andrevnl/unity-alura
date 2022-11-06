@@ -5,18 +5,21 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-public class ControlaJogador : MonoBehaviour 
+public class ControlaJogador : MonoBehaviour
 {
-
     public float velocidade = 10;
     private Vector3 direcao;
     public LayerMask MascaraChao;
     public GameObject TextoGameOver;
     public bool Vivo = true;
+    private Rigidbody rigidbodyJogador;
+    private Animator animatorJogador;
 
     private void Start()
     {
         Time.timeScale = 1;
+        rigidbodyJogador = GetComponent<Rigidbody>();
+        animatorJogador = GetComponent<Animator>();
     }
 
 
@@ -27,14 +30,14 @@ public class ControlaJogador : MonoBehaviour
         float eixoZ = Input.GetAxis("Vertical");
 
         direcao = new Vector3(eixoX, 0, eixoZ);
-        
+
         if (direcao != Vector3.zero)
         {
-            GetComponent<Animator>().SetBool("Movendo", true);
+            animatorJogador.SetBool("Movendo", true);
         }
         else
         {
-            GetComponent<Animator>().SetBool("Movendo", false);
+            animatorJogador.SetBool("Movendo", false);
         }
 
         if (!Vivo)
@@ -48,8 +51,8 @@ public class ControlaJogador : MonoBehaviour
 
     private void FixedUpdate()
     {
-        GetComponent<Rigidbody>().MovePosition
-        (GetComponent<Rigidbody>().position 
+        rigidbodyJogador.MovePosition
+        (rigidbodyJogador.position
          + (direcao * velocidade * Time.deltaTime));
 
         Ray raio = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -64,10 +67,8 @@ public class ControlaJogador : MonoBehaviour
             posicaoMiraJogador.y = transform.position.y;
 
             Quaternion novaRotacao = Quaternion.LookRotation(posicaoMiraJogador);
-            
-            GetComponent<Rigidbody>().MoveRotation(novaRotacao);
-            
+
+            rigidbodyJogador.MoveRotation(novaRotacao);
         }
-        
     }
 }
